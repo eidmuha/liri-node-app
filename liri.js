@@ -1,6 +1,12 @@
 //  loads environment variables from .env file into process.env
 require("dotenv").config();
 
+// load moment module for date formating
+var moment = require('moment');
+moment().format();
+
+const date = moment()
+
 // load the chalk modules for text colors on the terminal
 const chalk = require('chalk');
 
@@ -38,14 +44,14 @@ function init(){
         case "spotify-this-song":
             if (argument=='') {
                 argument = "Ace of Base"
-                spotifyThisSong();
             }
+            spotifyThisSong();
             break;
         case "movie-this":
             if (argument=='') {
                 argument = 'Mr. Nobody'
-                movieThis()
             }
+            movieThis()
             break;
         case "do-what-it-says":
             doWhatItSays();
@@ -70,13 +76,13 @@ function concert() {
 
     axios.get(url)
     .then(function (response) {
-    // console.log(response.data[0].datetime)
+    console.log("\n")
     response.data.forEach(element => {
-        console.log(element.venue.name)
-        console.log(element.venue.city)
-        console.log(element.datetime)
+        console.log("  NAME: "+chalk.blue(element.venue.name))
+        console.log("  LOCATION: "+chalk.blue(element.venue.city))
+        console.log("  DATE: "+chalk.blue(moment(element.datetime).toDate()))
 
-        console.log("========================================")
+        console.log("----------------------------------------------------------------\n")
     });
 
     })
@@ -113,17 +119,19 @@ function spotifyThisSong(){
 // using axios and OMDB API
 function movieThis(){
     // Make a request for a user with a given ID
-    axios.get("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy")
+    axios.get("http://www.omdbapi.com/?t="+argument+"&y=&plot=short&apikey=trilogy")
     .then(function (response) {
-    // handle success
-        console.log(response.data.Title);
-        console.log(response.data.Released);
-        console.log(response.data.imdbRating);
-        console.log(response.data.Ratings[1].Value);
-        console.log(response.data.Country);
-        console.log(response.data.Language);
-        console.log(response.data.Plot);
-        console.log(response.data.Actors);
+        console.log("\n=================MOVIE DETAILS=========================")
+        console.log("\tTITLE     :"+chalk.blue(response.data.Title));
+        console.log("\tRELEASED  :"+chalk.blue(response.data.Released));
+        console.log("\tRATING    :"+chalk.blue(response.data.imdbRating));
+        console.log("\tRT RATINGS:"+chalk.blue(response.data.Ratings[1].Value));
+        console.log("\tCOUNTRY   :"+chalk.blue(response.data.Country));
+        console.log("\tLANGUAGE  :"+chalk.blue(response.data.Language));
+        console.log("\tPLOT      :"+chalk.blue(response.data.Plot));
+        console.log("\tACTORS    :"+chalk.blue(response.data.Actors));
+
+        console.log("\n")
 
     })
     .catch(function (error) {
